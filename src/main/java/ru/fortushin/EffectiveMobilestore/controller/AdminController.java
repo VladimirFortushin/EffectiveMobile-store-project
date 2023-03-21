@@ -31,7 +31,6 @@ public class AdminController {
     private final CompanyService companyService;
     private final CompanyRepository companyRepository;
     private final ModelMapper modelMapper;
-    private final NotificationRepository notificationRepository;
 
     @Autowired
     public AdminController(GoodsService goodsService, DiscountService discountService, UserService userService,
@@ -42,8 +41,7 @@ public class AdminController {
                            CompanyRegistrationApplicationRepository companyRegistrationApplicationRepository,
                            CompanyRegistrationApplicationService companyRegistrationApplicationService,
                            GoodsRegistrationApplicationService goodsRegistrationApplicationService, CompanyService companyService,
-                           CompanyRepository companyRepository, ModelMapper modelMapper,
-                           NotificationRepository notificationRepository) {
+                           CompanyRepository companyRepository, ModelMapper modelMapper) {
         this.goodsService = goodsService;
         this.discountService = discountService;
         this.userService = userService;
@@ -56,9 +54,8 @@ public class AdminController {
         this.goodsRegistrationApplicationService = goodsRegistrationApplicationService;
         this.companyService = companyService;
         this.companyRepository = companyRepository;
-
         this.modelMapper = modelMapper;
-        this.notificationRepository = notificationRepository;
+
     }
 
     @GetMapping("/goods")

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.fortushin.EffectiveMobilestore.dto.UserDTO;
 import ru.fortushin.EffectiveMobilestore.model.User;
 import ru.fortushin.EffectiveMobilestore.repository.UserRepository;
 
@@ -19,13 +20,14 @@ public class RegistrationService {
     }
 
     @Transactional
-    public void register(User user){
+    public void register(UserDTO userDTO){
+        User user = new User();
         user.setAccountEnabled(true);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setUserName(user.getUserName());
-        user.setRole(user.getRole());
-        user.setEmail(user.getEmail());
-        user.setBalance(user.getBalance());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        user.setUserName(userDTO.getUserName());
+        user.setRole("ROLE_USER");
+        user.setEmail(userDTO.getEmail());
+        user.setBalance(userDTO.getBalance());
         userRepository.save(user);
     }
 }
