@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface GoodsRepository extends JpaRepository<Goods, Integer> {
-    Goods getByCompany(Company company);
+
     List<Goods> getAllByCompanyId(int companyId);
-    List<Goods> getAllByGoodsRegistrationApplicationId(int goodsRegistrationApplicationId);
+
 }

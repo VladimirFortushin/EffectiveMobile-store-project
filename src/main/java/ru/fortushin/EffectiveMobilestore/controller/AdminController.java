@@ -31,6 +31,7 @@ public class AdminController {
     private final CompanyService companyService;
     private final CompanyRepository companyRepository;
     private final ModelMapper modelMapper;
+    private final NotificationRepository notificationRepository;
 
     @Autowired
     public AdminController(GoodsService goodsService, DiscountService discountService, UserService userService,
@@ -41,7 +42,8 @@ public class AdminController {
                            CompanyRegistrationApplicationRepository companyRegistrationApplicationRepository,
                            CompanyRegistrationApplicationService companyRegistrationApplicationService,
                            GoodsRegistrationApplicationService goodsRegistrationApplicationService, CompanyService companyService,
-                           CompanyRepository companyRepository, ModelMapper modelMapper) {
+                           CompanyRepository companyRepository, ModelMapper modelMapper,
+                           NotificationRepository notificationRepository) {
         this.goodsService = goodsService;
         this.discountService = discountService;
         this.userService = userService;
@@ -56,6 +58,7 @@ public class AdminController {
         this.companyRepository = companyRepository;
 
         this.modelMapper = modelMapper;
+        this.notificationRepository = notificationRepository;
     }
 
     @GetMapping("/goods")
@@ -131,6 +134,21 @@ public class AdminController {
 
     }
 
+    @GetMapping("/users/notification-send")
+    public ResponseEntity<String> sendNotificationToListOfUsers(@RequestBody List<Notification> notificationList){
+        try{
+            for(User user : userRepository.findAllByNotificationListIn(notificationList)){
+                user.getNotificationList().addAll(notificationList);
+            }
+            notificationList.forEach(notificationService::create);
+
+            return ResponseEntity.status(HttpStatus.OK).body("Notification send success");
+        }catch (EntityNotFoundException e){
+            return handleException(e);
+        }
+
+    }
+
     @GetMapping("/users/{userId}/balance-update")
     public ResponseEntity<String> updateUserBalance(@PathVariable("userId") int userId, @RequestParam("balance") double balance){
         try{
@@ -188,7 +206,7 @@ public class AdminController {
         return ResponseEntity.ok(companyRegistrationApplicationRepository.findAll());
     }
 
-    @GetMapping("/company-register-application/{applicationId}")
+    @GetMapping("/company-register-application/{applicationId}/approve")
     public ResponseEntity<String> approveCompanyRegistrationApplication(@PathVariable("applicationId") int applicationId) {
         CompanyRegistrationApplication companyRegistrationApplication =
                 companyRegistrationApplicationService.get(applicationId);
@@ -200,7 +218,7 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body("Registration application approval success");
     }
 
-    @GetMapping("/company-register-application/{applicationId}")
+    @GetMapping("/company-register-application/{applicationId}/deny")
     public ResponseEntity<String> denyCompanyRegistrationApplication(@PathVariable("applicationId") int applicationId) {
         CompanyRegistrationApplication companyRegistrationApplication =
                 companyRegistrationApplicationService.get(applicationId);
@@ -235,7 +253,7 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body("Company removal success");
     }
 
-    @GetMapping("/goods-register-application/{applicationId}")
+    @GetMapping("/goods-register-application/{applicationId}/approve")
     public ResponseEntity<String> approveGoodsRegistrationApplication(@PathVariable("applicationId") int applicationId) {
         GoodsRegistrationApplication goodsRegistrationApplication =
                 goodsRegistrationApplicationService.get(applicationId);
@@ -244,7 +262,7 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body("Registration application approval success");
     }
 
-    @GetMapping("/goods-register-application/{applicationId}")
+    @GetMapping("/goods-register-application/{applicationId}/deny")
     public ResponseEntity<String> denyGoodsRegistrationApplication(@PathVariable("applicationId") int applicationId) {
         GoodsRegistrationApplication goodsRegistrationApplication =
                 goodsRegistrationApplicationService.get(applicationId);

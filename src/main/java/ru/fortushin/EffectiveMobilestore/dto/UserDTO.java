@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.fortushin.EffectiveMobilestore.model.PurchaseHistory;
 
 @Getter
 @Setter
@@ -12,6 +13,5 @@ import lombok.Setter;
 public class UserDTO {
     private String userName;
     private String email;
-    private String password;
     private double balance;
 }

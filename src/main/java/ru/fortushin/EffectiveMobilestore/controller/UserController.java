@@ -67,7 +67,7 @@ public class UserController {
     @GetMapping("/goods-list")
     public ResponseEntity<List<GoodsDTO>> getGoodsList(){
         List<GoodsDTO> goodsListForShow = new ArrayList<>();
-        List<Company> companyList = companyRepository.getAllByEnabled(true);
+        List<Company> companyList = companyRepository.getAllByIsEnabled(true);
         for(Company company : companyList){
             for(Goods goods : company.getGoodsList()){
                 if(goods.getGoodsRegistrationApplication().isApproved()){
@@ -100,6 +100,7 @@ public class UserController {
 
             } else {
                 List<NotificationDTO> list = new ArrayList<>();
+
                 for(Notification notification : notificationRepository.findAllByUserId(userId)){
                     list.add(modelMapper.map(notification, NotificationDTO.class));
                 }

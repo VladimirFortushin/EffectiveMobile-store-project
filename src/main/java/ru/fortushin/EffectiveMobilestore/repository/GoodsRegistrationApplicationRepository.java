@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface GoodsRegistrationApplicationRepository extends JpaRepository<GoodsRegistrationApplication, Integer> {
     GoodsRegistrationApplication findByCompany(Company company);
-    List<GoodsRegistrationApplication> findAllByApproved(boolean b);
+
 }
